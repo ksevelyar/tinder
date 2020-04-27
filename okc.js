@@ -35,9 +35,6 @@ class Liker {
 
 
   like() {
-    if ( $('.dynamic-likes-cap-modal') ) { return; }
-    if ( $('.likes-pill-button.disabled') ) { return }
-
     if (!$('.cardsummary-reflux-match-pct')) { return }
 
     const matchPercentage = Number($('.cardsummary-reflux-match-pct').innerText.replace('%', ''))
@@ -48,8 +45,9 @@ class Liker {
     const kidsNode = $('.matchprofile-details-section--family');
     if (kidsNode) {
       const kids = kidsNode.innerText
-      if ( 
-        kids.includes('Doesn’t have kids but might want them') 
+      if (
+        kids.includes('Doesn’t have kids but might want them') ||
+        kids.includes('Doesn’t have kids but wants them')
       ) {
         this.nope('kids', window.lastDelay, kids); return
       };
@@ -58,9 +56,9 @@ class Liker {
     const backgroundNode = $('.matchprofile-details-section--background');
     if (backgroundNode) {
       const background = backgroundNode.innerText
-      if ( 
+      if (
         background.includes('Christian') ||
-        background.includes('Muslim') 
+        background.includes('Muslim')
       ) {
         this.nope('magical thinker', window.lastDelay, background); return
       };
@@ -69,13 +67,27 @@ class Liker {
     const lifestyleNode = $('.matchprofile-details-section--lifestyle');
     if (lifestyleNode) {
       const lifestyle = lifestyleNode.innerText
-      if ( 
+      if (
         lifestyle.includes('Never smokes marijuana')
       ) {
         this.nope('!420', window.lastDelay, lifestyle); return
       };
     }
 
+
+    const descNode = $('.qmessays-essay');
+    if (descNode) {
+      const desc = descNode.innerText.replace('My self-summary', '')
+      if (
+        desc.length < 10 
+      ) {
+        this.nope('blank profile', window.lastDelay, desc); return
+      };
+    }
+
+
+    if ( $('.dynamic-likes-cap-modal') ) { return; }
+    if ( $('.likes-pill-button.disabled') ) { return }
     this.yep(window.lastDelay, matchPercentage)
   }
 
