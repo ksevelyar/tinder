@@ -11,7 +11,7 @@ let $ = selector => document.querySelector(selector)
 let $all = selector => document.querySelectorAll(selector)
 
 function contains(selector, text) {
-  const elements = $All(selector);
+  const elements = $all(selector);
   return Array.prototype.filter.call(elements, element => RegExp(text).test(element.textContent));
 }
 
@@ -48,11 +48,11 @@ class Liker {
     //const infoButton = $('.recCard__openProfile');
     //if (infoButton) { infoButton.click(); }
   }
-    
+
   nope(reason, meatbagDelay, description) {
-    const dislikeButton = $('[aria-label="Nope"]')   
+    const dislikeButton = $('[aria-label="Nope"]')
     if (!dislikeButton) { return; }
-      
+
     console.log(`[${meatbagDelay}]`, `[NOPE: ${reason}]`, description);
     dislikeButton.click();
   }
@@ -74,8 +74,18 @@ class Liker {
     const description = descriptionNode.innerText.toLowerCase()
     const d = description.toLowerCase()
 
-    if (d.includes("есть сын") || d.includes("есть дочь")) { this.nope('kids', window.lastDelay, description); return };
-    if (d.includes("серьезные отношения") || d.includes("серьёзные отношения")) { this.nope('why so serious?', window.lastDelay, description); return };
+    if (
+      d.includes("есть сын") ||
+      d.includes("есть дочь") ||
+      d.includes("есть дочка")
+    ) { this.nope('kids', window.lastDelay, description); return };
+
+    if (
+      d.includes("серьезные отношения") ||
+      d.includes("серьёзные отношения") ||
+      d.includes("serious relationship")
+    ) { this.nope('why so serious?', window.lastDelay, description); return };
+
     if (d.includes("kilometers away")) { this.nope('empty profile', window.lastDelay, description); return };
 
     if (
