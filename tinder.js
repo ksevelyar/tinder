@@ -1,11 +1,10 @@
 // ==UserScript==
 // @name         dat_filter_tinder
-// @namespace    http://tampermonkey.net/
-// @version      0.2
-// @description  try to take over the world!
-// @author       👽
+// @version      0.1
+// @description  sito huito
+// @author       ksevelyar
 // @grant        none
-// @include https://tinder.com/*
+// @include https://tinder.com/app/recs
 // ==/UserScript==
 
 function contains(selector, text) {
