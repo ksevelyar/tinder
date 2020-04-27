@@ -7,8 +7,11 @@
 // @include https://tinder.com/app/recs
 // ==/UserScript==
 
+let $ = selector => document.querySelector(selector)
+let $all = selector => document.querySelectorAll(selector)
+
 function contains(selector, text) {
-  const elements = document.querySelectorAll(selector);
+  const elements = $All(selector);
   return Array.prototype.filter.call(elements, element => RegExp(text).test(element.textContent));
 }
 
@@ -42,12 +45,12 @@ class Liker {
     const NotInterestedButton = contains('button span', 'Not interested')[0];
     if (NotInterestedButton) { NotInterestedButton.click(); }
 
-    //const infoButton = document.querySelector('.recCard__openProfile');
+    //const infoButton = $('.recCard__openProfile');
     //if (infoButton) { infoButton.click(); }
   }
     
   nope(reason, meatbagDelay, description) {
-    const dislikeButton = document.querySelector('[aria-label="Nope"]')   
+    const dislikeButton = $('[aria-label="Nope"]')   
     if (!dislikeButton) { return; }
       
     console.log(`[${meatbagDelay}]`, `[NOPE: ${reason}]`, description);
@@ -55,15 +58,15 @@ class Liker {
   }
   yes(description) {}
   yep(description) {
-    const likeButton = document.querySelector('[aria-label="Like"]') || document.querySelector('[aria-label="Лайк"]')
+    const likeButton = $('[aria-label="Like"]') || $('[aria-label="Лайк"]')
     if (!likeButton) { return; }
   }
 
   like() {
-    const likeButton = document.querySelector('[aria-label="Like"]') || document.querySelector('[aria-label="Лайк"]')
+    const likeButton = $('[aria-label="Like"]') || $('[aria-label="Лайк"]')
     if (!likeButton) { return; }
 
-    const superLikeButton = document.querySelector('[aria-label="Super Like"]');
+    const superLikeButton = $('[aria-label="Super Like"]');
 
     const descriptionNode = getElementByXpath('//*[@id="content"]/div/div[1]/div/main/div[1]/div/div/div[1]/div/div[1]/div[3]/div[6]/div/div[2]/div/div')
     if (!descriptionNode) { return }
