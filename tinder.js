@@ -86,6 +86,11 @@ class Liker {
     ) { this.nope('kids', window.lastDelay, description); return };
 
     if (
+      d.includes("не скупого") ||
+      d.includes("не жадного")
+    ) { this.nope('fraud', window.lastDelay, description); return };
+
+    if (
       d.includes("серьезные отношения") ||
       d.includes("серьёзные отношения") ||
       d.includes("serious relationship")
