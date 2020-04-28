@@ -30,7 +30,7 @@ class Liker {
     return this.latency;
   }
 
-  superlikesMode() {
+  isSuperlikesAvailable() {
     if (this.superlikes === false) return false;
 
     if (contains('.button__text span', 'Get More Super Likes').length) {
@@ -56,17 +56,22 @@ class Liker {
     console.log(`[${meatbagDelay}]`, `[NOPE: ${reason}]`, description);
     dislikeButton.click();
   }
-  yes(description) {}
-  yep(description) {
+  yes(meatbagDelay, description) {
+    const superLikeButton = $('[aria-label="Super Like"]');
     const likeButton = $('[aria-label="Like"]') || $('[aria-label="Лайк"]')
     if (!likeButton) { return; }
+
+    console.log(`[${window.lastDelay}]`, '[YES]', description);
+    this.isSuperlikesAvailable() ? superLikeButton.click() : likeButton.click();
+  }
+  yep(meatbagDelay, description) {
+    const likeButton = $('[aria-label="Like"]') || $('[aria-label="Лайк"]')
+    if (!likeButton) { return; }
+    console.log(`[${window.lastDelay}]`, '[YEP]', description);
+    likeButton.click();
   }
 
   like() {
-    const likeButton = $('[aria-label="Like"]') || $('[aria-label="Лайк"]')
-    if (!likeButton) { return; }
-
-    const superLikeButton = $('[aria-label="Super Like"]');
 
     const descriptionNode = getElementByXpath('//*[@id="content"]/div/div[1]/div/main/div[1]/div/div/div[1]/div/div[1]/div[3]/div[6]/div/div[2]/div/div')
     if (!descriptionNode) { return }
@@ -94,13 +99,11 @@ class Liker {
       d.includes("github") ||
       d.includes("linux")
     ) {
-      console.log(`[${window.lastDelay}]`, '[YES]', description);
-      this.superlikesMode() ? superLikeButton.click() : likeButton.click();
+      this.yes(window.lastDelay, description)
       return
     };
 
-    console.log(`[${window.lastDelay}]`, '[YEP]', description);
-    likeButton.click();
+    this.yep(window.lastDelay, description)
   }
 
   call() {
