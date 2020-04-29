@@ -72,11 +72,10 @@ class Liker {
   }
 
   like() {
-
     const descriptionNode = getElementByXpath('//*[@id="content"]/div/div[1]/div/main/div[1]/div/div/div[1]/div/div[1]/div[3]/div[6]/div/div[2]/div/div')
     if (!descriptionNode) { return }
 
-    const description = descriptionNode.innerText.toLowerCase()
+    const description = descriptionNode.innerText
     const d = description.toLowerCase()
 
     if (
@@ -86,9 +85,15 @@ class Liker {
     ) { this.nope('kids', window.lastDelay, description); return };
 
     if (
+      d.includes("trans ") ||
+      d.includes("транс ")
+    ) { this.nope('trans', window.lastDelay, description); return };
+
+    if (
       d.includes("не скупого") ||
+      d.includes("ищу папика") ||
       d.includes("не жадного")
-    ) { this.nope('fraud', window.lastDelay, description); return };
+    ) { this.nope('Scrooge McDuck', window.lastDelay, description); return };
 
     if (
       d.includes("серьезные отношения") ||
