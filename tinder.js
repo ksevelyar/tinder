@@ -30,12 +30,11 @@ const actions = {
   },
 
   yes(description) {
-    const superLikeButton = $('[aria-label="Super Like"]')
     const likeButton = $('[aria-label="Like"]') || $('[aria-label="Лайк"]')
     if (!likeButton) {return }
 
     console.log('[YES]', description)
-    actions._isSuperlikesAvailable() ? superLikeButton.click() : likeButton.click()
+    likeButton.click()
   }
 }
 
@@ -43,6 +42,7 @@ const filter = {
   delay() {
     return Math.ceil(Math.random() * 1000 + 4000)
   },
+
   hidePopups() {
     const NotInterestedButton = page.contains('button span', 'Not interested')[0]
     if (NotInterestedButton) {NotInterestedButton.click()}
@@ -76,28 +76,33 @@ const filter = {
       d.includes("♑") ||
       d.includes("♒") ||
       d.includes("♓")
-    ) {actions.nope('magical thinker', description); return }
+    ) { actions.nope('magical thinker', description); return }
 
     if (
       d.includes("не скупого") ||
       d.includes("ищу папика") ||
       d.includes("ищу щедрого") ||
       d.includes("не жадного")
-    ) {actions.nope('🦆', description); return }
+    ) { actions.nope('🦆', description); return }
 
     if (
       d.includes("отнош") ||
       d.includes("serious relationship")
-    ) {actions.nope('why so serious?', description); return }
+    ) { actions.nope('why so serious?', description); return }
 
     if (
       d.includes("мужчина") ||
       d.includes("женщина")
-    ) {actions.nope('gender roles', description); return }
+    ) { actions.nope('gender roles', description); return }
 
     if (
       d.includes("мужа")
-    ) {actions.nope('💨', description); return }
+    ) { actions.nope('💨', description); return }
+
+    if (
+      d.includes("любимого") ||
+      d.includes("ухаживать")
+    ) { actions.nope('paralympic games', description); return }
 
     if (
       d.includes("программист") ||
@@ -113,6 +118,6 @@ const filter = {
 window.addEventListener('load', () => setTimeout(filter.call, 5000), false)
 document.addEventListener('keyup', (event) => {
   if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
-    setTimeout(filter.call, 1500)
+    setTimeout(filter.call, 1000)
   }
 })

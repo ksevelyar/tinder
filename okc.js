@@ -54,7 +54,8 @@ const filter = {
       const kids = kidsNode.innerText
       if (
         kids.includes('Doesn’t have kids but might want them') ||
-        kids.includes('Doesn’t have kids but wants them')
+        kids.includes('Doesn’t have kids but wants them') ||
+        kids.includes('Has kid(s)')
       ) {
         actions.nope('kids', kids)
         return
@@ -99,6 +100,6 @@ const filter = {
 window.addEventListener('load', () => setTimeout(filter.call, 5000), false)
 document.addEventListener('keyup', (event) => {
   if (event.key === "1" || event.key === "2") {
-    setTimeout(filter.call, 1500)
+    setTimeout(filter.call, 1000)
   }
 })
