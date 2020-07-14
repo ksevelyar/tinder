@@ -27,6 +27,7 @@ const actions = {
 
     console.log(`[NOPE: ${reason}]`, description)
     dislikeButton.click()
+    setTimeout(filter.call, 1000)
   },
 
   yes(description) {
@@ -35,6 +36,7 @@ const actions = {
 
     console.log('[YES]', description)
     likeButton.click()
+    setTimeout(filter.call, 1000)
   }
 }
 
@@ -56,59 +58,88 @@ const filter = {
     const description = descriptionNode.innerText
     console.log(`\n${description}\n`)
     const d = description.toLowerCase()
+    window.d = d
+
+    if (
+      d.length < 5 ||
+      d.includes("kilometers away") ||
+      d.includes("lives in") ||
+      d.includes("inst", "инст") && d.length < 42
+    ) {
+      actions.nope('empty profile', description)
+      return
+    }
+
+    if (
+      d.includes('взяла билет в театр')
+    ) {actions.nope('fraud', description); return }
 
     if (
       d.includes("есть сын") ||
       d.includes("есть дочь") ||
       d.includes("есть дочка") ||
-      d.includes("есть ребенок")
+      d.includes("есть ребенок") ||
+      d.includes("мама сына")
     ) {actions.nope('kids', description); return }
 
     if (
-      d.includes("♈") ||
-      d.includes("♉") ||
-      d.includes("♊") ||
-      d.includes("♋") ||
-      d.includes("♌") ||
-      d.includes("♍") ||
-      d.includes("♎") ||
-      d.includes("♐") ||
-      d.includes("♑") ||
-      d.includes("♒") ||
-      d.includes("♓")
-    ) { actions.nope('magical thinker', description); return }
+      d.includes("♈", "♉", "♊", "♋", "♌", "♍", "♎", "♐", "♑", "♒", "♓") ||
+      d.includes("Koзepoг",
+        "Вoдoлeй",
+        "Pыбы",
+        "Oвeн",
+        "Teлeц",
+        "Близнeцы",
+        "Pak",
+        "Лeв",
+        "Дeвa",
+        "Вecы",
+        "Ckopпиoн",
+        "Cтpeлeц"
+      ) ||
+      d.includes("православ")
+
+    ) {
+      actions.nope('magical thinker', description)
+      return
+    }
 
     if (
       d.includes("не скупого") ||
       d.includes("ищу папика") ||
       d.includes("ищу щедрого") ||
+      d.includes("приветик") ||
       d.includes("не жадного")
-    ) { actions.nope('🦆', description); return }
+    ) {actions.nope('🦆', description); return }
 
     if (
-      d.includes("отнош") ||
+      d.includes("серь") && d.includes("отнош") ||
+      d.includes("ищу отношения") ||
       d.includes("serious relationship")
-    ) { actions.nope('why so serious?', description); return }
+    ) {actions.nope('why so serious?', description); return }
 
     if (
       d.includes("мужчина") ||
       d.includes("женщина")
-    ) { actions.nope('gender roles', description); return }
+    ) {actions.nope('gender roles', description); return }
 
     if (
       d.includes("мужа")
-    ) { actions.nope('💨', description); return }
+    ) {actions.nope('💨', description); return }
 
     if (
       d.includes("любимого") ||
-      d.includes("ухаживать")
-    ) { actions.nope('paralympic games', description); return }
+      d.includes("ухаживать") ||
+      d.includes("здесь редко") ||
+      d.includes("леди")
+    ) {actions.nope('paralympic games', description); return }
 
     if (
       d.includes("программист") ||
       d.includes("programmer") ||
       d.includes("github") ||
-      d.includes("linux")
+      d.includes("linux") ||
+      d.includes("420", "4:20")
     ) {
       actions.yes(description)
     }
@@ -118,6 +149,6 @@ const filter = {
 window.addEventListener('load', () => setTimeout(filter.call, 5000), false)
 document.addEventListener('keyup', (event) => {
   if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
-    setTimeout(filter.call, 1000)
+    setTimeout(filter.call, 700)
   }
 })
