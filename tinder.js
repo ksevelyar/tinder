@@ -1,6 +1,6 @@
 // ==UserScript==
-// @name         dat_filter_tinder
-// @grant        none
+// @name    dat_filter_tinder
+// @grant   none
 // @include https://tinder.com/app/recs
 // ==/UserScript==
 
@@ -31,6 +31,9 @@ const positiveChecks = {
   },
   feminism(desc) {
     return desc.includes("femin") || desc.includes("фемин")
+  },
+  atheism(desc) {
+    return desc.includes("atheism")
   },
   chill(desc) {
     return ["420", "4:20", "🍄"].some(substring => {
