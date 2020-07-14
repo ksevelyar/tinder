@@ -1,154 +1,168 @@
 // ==UserScript==
 // @name         dat_filter_tinder
-// @version      0.3
-// @description  sito huito
-// @author       ksevelyar
 // @grant        none
 // @include https://tinder.com/app/recs
 // ==/UserScript==
 
-let $ = selector => document.querySelector(selector)
-let $all = selector => document.querySelectorAll(selector)
+const $ = selector => document.querySelector(selector)
 
-const page = {
-  contains(selector, text) {
-    const elements = $all(selector)
-    return Array.prototype.filter.call(elements, element => RegExp(text).test(element.textContent))
+const positiveChecks = {
+  dev(desc) {
+    return [
+      "elixir", "phoenix", "javascript", "vue", "rust", "sql",
+      "git", "github",
+      "programmist", "programmer", "dev"
+    ].some(substring => {
+      desc.includes(substring)
+    })
   },
-  getElementByXpath(path) {
-    return document.evaluate(path, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue
+  devops(desc) {
+    return ["linux", "nix", "k8s", "bsd"].some(substring => {
+      desc.includes(substring)
+    })
+  },
+  microcontrollers(desc) {
+    return ["stm", "esp", "attiny", "arm", "arduino"].some(substring => {
+      desc.includes(substring)
+    })
+  },
+  science(desc) {
+    return desc.includes("math") || desc.includes("chemistry")
+  },
+  feminism(desc) {
+    return desc.includes("femin") || desc.includes("фемин")
+  },
+  chill(desc) {
+    return ["420", "4:20", "🍄"].some(substring => {
+      desc.includes(substring)
+    })
+  }
+}
+
+const negativeChecks = {
+  magicalThinker(desc) { // https://en.wikipedia.org/wiki/Magical_thinking
+    return [
+      "♈", "♉", "♊", "♋", "♌", "♍", "♎", "♐", "♑", "♒", "♓",
+      "Koзepoг",
+      "Вoдoлeй",
+      "Pыбы",
+      "Oвeн",
+      "Teлeц",
+      "Близнeцы",
+      "Pak",
+      "Лeв",
+      "Дeвa",
+      "Вecы",
+      "Ckopпиoн",
+      "Cтpeлeц",
+      "православ"
+    ].some(substring => {
+      desc.includes(substring)
+    })
+  },
+  emptyProfile(desc) {
+    return desc.length < 5 ||
+      desc.includes("kilometers away") ||
+      desc.includes("lives in") ||
+      desc.includes("inst", "инст") && desc.length < 42
+  },
+  fraud(desc) {
+    return desc.includes("не скупого") ||
+      desc.includes("ищу папика") ||
+      desc.includes("ищу щедрого") ||
+      desc.includes("приветик") ||
+      desc.includes("не жадного") ||
+      desc.includes('взяла билет в театр') ||
+      desc.includes("здесь редко") ||
+      desc.includes('тут не сижу')
+  },
+  kids(desc) {
+    return desc.includes("есть сын") ||
+      desc.includes("есть дочь") ||
+      desc.includes("есть дочка") ||
+      desc.includes("есть ребенок") ||
+      desc.includes("мама сына")
+  },
+  "whySoSerious?"(desc) {
+    return desc.includes("серь") && desc.includes("отнош") ||
+      desc.includes("ищу отношения") ||
+      desc.includes("serious relationship")
+  },
+  genderRoles(desc) {
+    return desc.includes("мужчин") || desc.includes("женщин")
+  },
+  differentGoals(desc) {
+    return desc.includes("любимого") ||
+      desc.includes("ухаживать") ||
+      desc.includes("леди") ||
+      desc.includes("мужа")
   }
 }
 
 const actions = {
   nope(reason, description) {
     const dislikeButton = $('[aria-label="Nope"]')
-    if (!dislikeButton) {return }
+    if (!dislikeButton) {
+      return
+    }
 
     console.log(`[NOPE: ${reason}]`, description)
     dislikeButton.click()
     setTimeout(filter.call, 1000)
   },
-
-  yes(description) {
+  yes(reason, description) {
     const likeButton = $('[aria-label="Like"]') || $('[aria-label="Лайк"]')
-    if (!likeButton) {return }
+    if (!likeButton) {
+      return
+    }
 
-    console.log('[YES]', description)
+    console.log(`[YES: ${reason}]`, description)
     likeButton.click()
     setTimeout(filter.call, 1000)
   }
 }
 
 const filter = {
-  delay() {
-    return Math.ceil(Math.random() * 1000 + 4000)
+  delay(extraDelay = 0) {
+    return Math.ceil(Math.random() * 1000 + 500 + extraDelay)
   },
 
-  hidePopups() {
-    const NotInterestedButton = page.contains('button span', 'Not interested')[0]
-    if (NotInterestedButton) {NotInterestedButton.click()}
+  getElementByXpath(path) {
+    return document.evaluate(path, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue
+  },
+  fetchDescription() {
+    const descriptionNode = filter.getElementByXpath('//*[@id="content"]/div/div[1]/div/main/div[1]/div/div/div[1]/div/div[1]/div[3]/div[6]/div/div[2]/div/div')
+    if (descriptionNode) {return descriptionNode.innerText}
   },
 
   call() {
-    filter.hidePopups()
-    const descriptionNode = page.getElementByXpath('//*[@id="content"]/div/div[1]/div/main/div[1]/div/div/div[1]/div/div[1]/div[3]/div[6]/div/div[2]/div/div')
-    if (!descriptionNode) {return }
+    const description = filter.fetchDescription()
+    console.log(`\n\n${description}\n\n`)
+    const desc = description.toLowerCase()
 
-    const description = descriptionNode.innerText
-    console.log(`\n${description}\n`)
-    const d = description.toLowerCase()
-    window.d = d
+    Object.keys(positiveChecks).every(positiveCheck => {
+      console.log('🕶️', positiveCheck)
+      if (positiveChecks[positiveCheck](desc)) {
+        actions.yes(positiveCheck, description)
+        return false
+      }
+      return true
+    })
 
-    if (
-      d.length < 5 ||
-      d.includes("kilometers away") ||
-      d.includes("lives in") ||
-      d.includes("inst", "инст") && d.length < 42
-    ) {
-      actions.nope('empty profile', description)
-      return
-    }
-
-    if (
-      d.includes('взяла билет в театр')
-    ) {actions.nope('fraud', description); return }
-
-    if (
-      d.includes("есть сын") ||
-      d.includes("есть дочь") ||
-      d.includes("есть дочка") ||
-      d.includes("есть ребенок") ||
-      d.includes("мама сына")
-    ) {actions.nope('kids', description); return }
-
-    if (
-      d.includes("♈", "♉", "♊", "♋", "♌", "♍", "♎", "♐", "♑", "♒", "♓") ||
-      d.includes("Koзepoг",
-        "Вoдoлeй",
-        "Pыбы",
-        "Oвeн",
-        "Teлeц",
-        "Близнeцы",
-        "Pak",
-        "Лeв",
-        "Дeвa",
-        "Вecы",
-        "Ckopпиoн",
-        "Cтpeлeц"
-      ) ||
-      d.includes("православ")
-
-    ) {
-      actions.nope('magical thinker', description)
-      return
-    }
-
-    if (
-      d.includes("не скупого") ||
-      d.includes("ищу папика") ||
-      d.includes("ищу щедрого") ||
-      d.includes("приветик") ||
-      d.includes("не жадного")
-    ) {actions.nope('🦆', description); return }
-
-    if (
-      d.includes("серь") && d.includes("отнош") ||
-      d.includes("ищу отношения") ||
-      d.includes("serious relationship")
-    ) {actions.nope('why so serious?', description); return }
-
-    if (
-      d.includes("мужчина") ||
-      d.includes("женщина")
-    ) {actions.nope('gender roles', description); return }
-
-    if (
-      d.includes("мужа")
-    ) {actions.nope('💨', description); return }
-
-    if (
-      d.includes("любимого") ||
-      d.includes("ухаживать") ||
-      d.includes("здесь редко") ||
-      d.includes("леди")
-    ) {actions.nope('paralympic games', description); return }
-
-    if (
-      d.includes("программист") ||
-      d.includes("programmer") ||
-      d.includes("github") ||
-      d.includes("linux") ||
-      d.includes("420", "4:20")
-    ) {
-      actions.yes(description)
-    }
+    Object.keys(negativeChecks).every(negativeCheck => {
+      console.log('💀', negativeCheck)
+      if (negativeChecks[negativeCheck](desc)) {
+        actions.nope(negativeCheck, description)
+        return false
+      }
+      return true
+    })
   }
 }
 
-window.addEventListener('load', () => setTimeout(filter.call, 5000), false)
+window.addEventListener('load', () => setTimeout(filter.call, filter.delay(4000)), false)
 document.addEventListener('keyup', (event) => {
   if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
-    setTimeout(filter.call, 700)
+    setTimeout(filter.call, filter.delay())
   }
 })
