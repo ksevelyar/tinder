@@ -46,18 +46,18 @@ const negativeChecks = {
   magicalThinker(desc) { // https://en.wikipedia.org/wiki/Magical_thinking
     return [
       '♈', '♉', '♊', '♋', '♌', '♍', '♎', '♐', '♑', '♒', '♓',
-      'Koзepoг',
-      'Вoдoлeй',
-      'Pыбы',
-      'Oвeн',
-      'Teлeц',
-      'Близнeцы',
-      'Pak',
-      'Лeв',
-      'Дeвa',
-      'Вecы',
-      'Ckopпиoн',
-      'Cтpeлeц',
+      'koзepoг',
+      'вoдoлeй',
+      'pыбы',
+      'oвeн',
+      'teлeц',
+      'близнeцы',
+      'pak',
+      'лeв',
+      'дeвa',
+      'вecы',
+      'ckopпиoн',
+      'cтpeлeц',
       'православ'
     ].some(substring => {
       desc.includes(substring)
@@ -75,9 +75,10 @@ const negativeChecks = {
       desc.includes('ищу щедрого') ||
       desc.includes('приветик') ||
       desc.includes('не жадного') ||
-      desc.includes('взяла билет в театр') ||
+      desc.includes('билет в театр') ||
       desc.includes('здесь редко') ||
-      desc.includes('тут не сижу')
+      desc.includes('тут не сижу') ||
+      desc.includes('тут бываю редко')
   },
   kids(desc) {
     return desc.includes('есть сын') ||
