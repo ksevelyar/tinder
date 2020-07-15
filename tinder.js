@@ -12,9 +12,7 @@ const positiveChecks = {
       'elixir', 'phoenix', 'javascript', 'vue', 'rust', 'sql',
       'git', 'github',
       'programmist', 'programmer', 'dev'
-    ].some(substring => {
-      desc.includes(substring)
-    })
+    ].some(substring => desc.includes(substring))
   },
   devops(desc) {
     return ['linux', 'nix', 'k8s', 'bsd'].some(substring => {
@@ -22,12 +20,13 @@ const positiveChecks = {
     })
   },
   microcontrollers(desc) {
-    return ['stm', 'esp', 'attiny', 'arm', 'arduino'].some(substring => {
-      desc.includes(substring)
-    })
+    return ['stm32', 'esp32', 'attiny', 'arduino'].some(substring => desc.includes(substring))
   },
   science(desc) {
-    return desc.includes('math') || desc.includes('chemistry')
+    return [
+      'math', 'chemistry',
+      'матем', 'хими'
+    ].some(substring => desc.includes(substring))
   },
   feminism(desc) {
     return desc.includes('femin') || desc.includes('фемин')
@@ -36,9 +35,10 @@ const positiveChecks = {
     return desc.includes('atheism')
   },
   chill(desc) {
-    return ['420', '4:20', '🍄'].some(substring => {
-      desc.includes(substring)
-    })
+    return ['420', '4:20', '🍄'].some(substring => desc.includes(substring))
+  },
+  books(desc) {
+    return ['blindsight', 'sapolsky'].some(substring => desc.includes(substring))
   }
 }
 
@@ -58,20 +58,22 @@ const negativeChecks = {
       'вecы',
       'ckopпиoн',
       'cтpeлeц',
-      'православ'
-    ].some(substring => {
-      desc.includes(substring)
-    })
+      'православ', 'christian'
+    ].some(substring => desc.includes(substring))
   },
   emptyProfile(desc) {
     return desc.length < 5 ||
       desc.includes('kilometers away') ||
       desc.includes('lives in') ||
-      desc.includes('inst', 'инст') && desc.length < 42
+      desc.includes('inst', 'инст') && desc.length < 42 ||
+      desc.includes('рост') && desc.length < 20
   },
   fraud(desc) {
     return desc.includes('не скупого') ||
       desc.includes('ищу папика') ||
+      desc.includes('вирт ') ||
+      desc.includes('ищу спонсора') ||
+      desc.includes('модель ню') ||
       desc.includes('ищу щедрого') ||
       desc.includes('приветик') ||
       desc.includes('не жадного') ||
@@ -96,10 +98,10 @@ const negativeChecks = {
     return desc.includes('мужчин') || desc.includes('женщин')
   },
   differentGoals(desc) {
-    return desc.includes('любимого') ||
-      desc.includes('ухаживать') ||
-      desc.includes('леди') ||
-      desc.includes('мужа')
+    return [
+      'любимого', 'любовь', 'ухаживать',
+      'мужа', 'женат', 'леди'
+    ].some(substring => desc.includes(substring))
   }
 }
 
@@ -136,35 +138,49 @@ const filter = {
   },
   fetchDescription() {
     const descriptionNode = filter.getElementByXpath('//*[@id="content"]/div/div[1]/div/main/div[1]/div/div/div[1]/div/div[1]/div[3]/div[6]/div/div[2]/div/div')
-    if (descriptionNode) {return descriptionNode.innerText}
+    if (descriptionNode) {
+      const description = descriptionNode.innerText
+      window.d = description
+
+      return description
+    }
   },
 
   call() {
     const description = filter.fetchDescription()
-    console.log(`\n\n${description}\n\n`)
     const desc = description.toLowerCase()
 
-    Object.keys(positiveChecks).every(positiveCheck => {
-      console.log('🕶️', positiveCheck)
+    const nothingNegative = Object.keys(positiveChecks).every(positiveCheck => {
       if (positiveChecks[positiveCheck](desc)) {
         actions.yes(positiveCheck, description)
         return false
       }
       return true
     })
+    if (!nothingNegative) {return}
 
-    Object.keys(negativeChecks).every(negativeCheck => {
-      console.log('💀', negativeCheck)
+    const nothingPositive = Object.keys(negativeChecks).every(negativeCheck => {
       if (negativeChecks[negativeCheck](desc)) {
         actions.nope(negativeCheck, description)
         return false
       }
       return true
     })
+    if (!nothingPositive) {return}
+
+    console.log('?', `\n\n${description}\n\n`)
+    setTimeout(() => {
+      console.log('🤖')
+      location.reload()
+    }, filter.delay(120000))
   }
 }
 
-window.addEventListener('load', () => setTimeout(filter.call, filter.delay(4000)), false)
+window.addEventListener('load', () => {
+  setTimeout(filter.call, filter.delay(4000))
+  $('.recsCardboard').style.maxWidth = '640px'
+  $('.recsCardboard').style.height = '900px'
+}, false)
 document.addEventListener('keyup', (event) => {
   if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
     setTimeout(filter.call, filter.delay())
