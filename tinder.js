@@ -9,34 +9,34 @@ const $ = selector => document.querySelector(selector)
 const positiveChecks = {
   dev(desc) {
     return [
-      "elixir", "phoenix", "javascript", "vue", "rust", "sql",
-      "git", "github",
-      "programmist", "programmer", "dev"
+      'elixir', 'phoenix', 'javascript', 'vue', 'rust', 'sql',
+      'git', 'github',
+      'programmist', 'programmer', 'dev'
     ].some(substring => {
       desc.includes(substring)
     })
   },
   devops(desc) {
-    return ["linux", "nix", "k8s", "bsd"].some(substring => {
+    return ['linux', 'nix', 'k8s', 'bsd'].some(substring => {
       desc.includes(substring)
     })
   },
   microcontrollers(desc) {
-    return ["stm", "esp", "attiny", "arm", "arduino"].some(substring => {
+    return ['stm', 'esp', 'attiny', 'arm', 'arduino'].some(substring => {
       desc.includes(substring)
     })
   },
   science(desc) {
-    return desc.includes("math") || desc.includes("chemistry")
+    return desc.includes('math') || desc.includes('chemistry')
   },
   feminism(desc) {
-    return desc.includes("femin") || desc.includes("фемин")
+    return desc.includes('femin') || desc.includes('фемин')
   },
   atheism(desc) {
-    return desc.includes("atheism")
+    return desc.includes('atheism')
   },
   chill(desc) {
-    return ["420", "4:20", "🍄"].some(substring => {
+    return ['420', '4:20', '🍄'].some(substring => {
       desc.includes(substring)
     })
   }
@@ -45,60 +45,60 @@ const positiveChecks = {
 const negativeChecks = {
   magicalThinker(desc) { // https://en.wikipedia.org/wiki/Magical_thinking
     return [
-      "♈", "♉", "♊", "♋", "♌", "♍", "♎", "♐", "♑", "♒", "♓",
-      "Koзepoг",
-      "Вoдoлeй",
-      "Pыбы",
-      "Oвeн",
-      "Teлeц",
-      "Близнeцы",
-      "Pak",
-      "Лeв",
-      "Дeвa",
-      "Вecы",
-      "Ckopпиoн",
-      "Cтpeлeц",
-      "православ"
+      '♈', '♉', '♊', '♋', '♌', '♍', '♎', '♐', '♑', '♒', '♓',
+      'Koзepoг',
+      'Вoдoлeй',
+      'Pыбы',
+      'Oвeн',
+      'Teлeц',
+      'Близнeцы',
+      'Pak',
+      'Лeв',
+      'Дeвa',
+      'Вecы',
+      'Ckopпиoн',
+      'Cтpeлeц',
+      'православ'
     ].some(substring => {
       desc.includes(substring)
     })
   },
   emptyProfile(desc) {
     return desc.length < 5 ||
-      desc.includes("kilometers away") ||
-      desc.includes("lives in") ||
-      desc.includes("inst", "инст") && desc.length < 42
+      desc.includes('kilometers away') ||
+      desc.includes('lives in') ||
+      desc.includes('inst', 'инст') && desc.length < 42
   },
   fraud(desc) {
-    return desc.includes("не скупого") ||
-      desc.includes("ищу папика") ||
-      desc.includes("ищу щедрого") ||
-      desc.includes("приветик") ||
-      desc.includes("не жадного") ||
+    return desc.includes('не скупого') ||
+      desc.includes('ищу папика') ||
+      desc.includes('ищу щедрого') ||
+      desc.includes('приветик') ||
+      desc.includes('не жадного') ||
       desc.includes('взяла билет в театр') ||
-      desc.includes("здесь редко") ||
+      desc.includes('здесь редко') ||
       desc.includes('тут не сижу')
   },
   kids(desc) {
-    return desc.includes("есть сын") ||
-      desc.includes("есть дочь") ||
-      desc.includes("есть дочка") ||
-      desc.includes("есть ребенок") ||
-      desc.includes("мама сына")
+    return desc.includes('есть сын') ||
+      desc.includes('есть дочь') ||
+      desc.includes('есть дочка') ||
+      desc.includes('есть ребенок') ||
+      desc.includes('мама сына')
   },
-  "whySoSerious?"(desc) {
-    return desc.includes("серь") && desc.includes("отнош") ||
-      desc.includes("ищу отношения") ||
-      desc.includes("serious relationship")
+  'whySoSerious?'(desc) {
+    return desc.includes('серь') && desc.includes('отнош') ||
+      desc.includes('ищу отношения') ||
+      desc.includes('serious relationship')
   },
   genderRoles(desc) {
-    return desc.includes("мужчин") || desc.includes("женщин")
+    return desc.includes('мужчин') || desc.includes('женщин')
   },
   differentGoals(desc) {
-    return desc.includes("любимого") ||
-      desc.includes("ухаживать") ||
-      desc.includes("леди") ||
-      desc.includes("мужа")
+    return desc.includes('любимого') ||
+      desc.includes('ухаживать') ||
+      desc.includes('леди') ||
+      desc.includes('мужа')
   }
 }
 
@@ -165,7 +165,7 @@ const filter = {
 
 window.addEventListener('load', () => setTimeout(filter.call, filter.delay(4000)), false)
 document.addEventListener('keyup', (event) => {
-  if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
+  if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
     setTimeout(filter.call, filter.delay())
   }
 })
