@@ -99,7 +99,7 @@ const filter = {
 
 window.addEventListener('load', () => setTimeout(filter.call, 5000), false)
 document.addEventListener('keyup', (event) => {
-  if (event.key === "1" || event.key === "2") {
+  if (event.key === '1' || event.key === '2') {
     setTimeout(filter.call, 1000)
   }
 })

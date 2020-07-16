@@ -66,6 +66,7 @@ const negativeChecks = {
       desc.includes('kilometers away') ||
       desc.includes('lives in') ||
       desc.includes('inst', 'инст') && desc.length < 42 ||
+      desc.includes('@') && desc.length < 20 ||
       desc.includes('рост') && desc.length < 20
   },
   fraud(desc) {
@@ -99,7 +100,7 @@ const negativeChecks = {
   },
   differentGoals(desc) {
     return [
-      'любимого', 'любовь', 'ухаживать',
+      'любимого', 'ухаживать', 'хочу влюбиться',
       'мужа', 'женат', 'леди'
     ].some(substring => desc.includes(substring))
   }
@@ -136,11 +137,30 @@ const filter = {
   getElementByXpath(path) {
     return document.evaluate(path, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue
   },
+  appendDescription() {
+    const existedDescNode = document.querySelector('#description')
+    if (existedDescNode) {return existedDescNode}
+
+    const descNode = document.createElement('div')
+    descNode.id = 'description'
+    descNode.style.position = 'absolute'
+    descNode.style.background = '#fff'
+    descNode.style.left = '10px'
+    descNode.style.top = '500px'
+    descNode.style.width = '320px'
+    document.body.appendChild(descNode)
+
+    return descNode
+  },
   fetchDescription() {
     const descriptionNode = filter.getElementByXpath('//*[@id="content"]/div/div[1]/div/main/div[1]/div/div/div[1]/div/div[1]/div[3]/div[6]/div/div[2]/div/div')
+
     if (descriptionNode) {
       const description = descriptionNode.innerText
       window.d = description
+
+      filter.appendDescription()
+      document.querySelector('#description').innerText = description
 
       return description
     }
@@ -157,7 +177,7 @@ const filter = {
       }
       return true
     })
-    if (!nothingNegative) {return}
+    if (!nothingNegative) {return }
 
     const nothingPositive = Object.keys(negativeChecks).every(negativeCheck => {
       if (negativeChecks[negativeCheck](desc)) {
@@ -166,10 +186,10 @@ const filter = {
       }
       return true
     })
-    if (!nothingPositive) {return}
+    if (!nothingPositive) {return }
 
     console.log('?', `\n\n${description}\n\n`)
-    setTimeout(() => {
+    window.reloadTimer = setTimeout(() => {
       console.log('🤖')
       location.reload()
     }, filter.delay(120000))
@@ -178,11 +198,13 @@ const filter = {
 
 window.addEventListener('load', () => {
   setTimeout(filter.call, filter.delay(4000))
+
   $('.recsCardboard').style.maxWidth = '640px'
   $('.recsCardboard').style.height = '900px'
 }, false)
 document.addEventListener('keyup', (event) => {
   if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
     setTimeout(filter.call, filter.delay())
+    clearTimeout(window.reloadTimer)
   }
 })
