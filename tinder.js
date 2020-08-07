@@ -10,8 +10,7 @@ const positiveChecks = {
   dev(desc) {
     return [
       'elixir', 'phoenix', 'javascript', 'vue', 'rust', 'sql',
-      'git', 'github',
-      'programmist', 'programmer', 'dev'
+      ' git', 'programm', 'dev'
     ].some(substring => desc.includes(substring))
   },
   devops(desc) {
@@ -46,23 +45,23 @@ const negativeChecks = {
   magicalThinker(desc) { // https://en.wikipedia.org/wiki/Magical_thinking
     return [
       '♈', '♉', '♊', '♋', '♌', '♍', '♎', '♐', '♑', '♒', '♓',
-      'koзepoг',
+      'кoзepoг',
       'вoдoлeй',
       'pыбы',
       'oвeн',
-      'teлeц',
+      'тeлeц',
       'близнeцы',
-      'pak',
+      'paк',
       'лeв',
       'дeвa',
       'вecы',
-      'ckopпиoн',
+      'cкopпиoн',
       'cтpeлeц',
       'православ', 'christian'
     ].some(substring => desc.includes(substring))
   },
   emptyProfile(desc) {
-    return desc.length < 5 ||
+    return desc.length < 10 ||
       desc.includes('kilometers away') ||
       desc.includes('lives in') ||
       desc.includes('inst', 'инст') && desc.length < 42 ||
@@ -71,7 +70,7 @@ const negativeChecks = {
   },
   fraud(desc) {
     return desc.includes('не скупого') ||
-      desc.includes('ищу папика') ||
+      desc.includes('папик') ||
       desc.includes('вирт ') ||
       desc.includes('ищу спонсора') ||
       desc.includes('модель ню') ||
@@ -100,8 +99,9 @@ const negativeChecks = {
   },
   differentGoals(desc) {
     return [
-      'любимого', 'ухаживать', 'хочу влюбиться',
-      'мужа', 'женат', 'леди'
+      'любимого', 'ухаживать', 'хочу влюбиться', 'половинку',
+      'мужа', 'женат', 'жених',
+      'леди'
     ].some(substring => desc.includes(substring))
   }
 }
