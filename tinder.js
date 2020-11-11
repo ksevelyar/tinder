@@ -151,7 +151,10 @@ const filter = {
     return descNode
   },
   fetchDescription() {
-    const descriptionNode = filter.getElementByXpath('//*[@id="content"]/div/div[1]/div/main/div[1]/div/div/div[1]/div/div[1]/div[3]/div[3]/div/div[2]/div/div[2]')
+    const variant1 = filter.getElementByXpath('//*[@id="content"]/div/div[1]/div/main/div[1]/div/div/div[1]/div[1]/div[1]/div[3]/div[3]/div/div[2]/div/div/div[2]')
+    const variant2 = filter.getElementByXpath('//*[@id="content"]/div/div[1]/div/main/div[1]/div/div/div[1]/div/div[1]/div[3]/div[3]/div/div[2]/div/div[2]')
+
+    const descriptionNode = variant1 || variant2
 
     if (descriptionNode) {
       const description = descriptionNode.innerText
@@ -186,6 +189,8 @@ const filter = {
       return true
     })
     if (!nothingPositive) {return }
+
+    if(!rawDescription) { console.log('fail'); return }
 
     console.log('?', `\n\n${rawDescription}\n\n`)
     window.reloadTimer = setTimeout(() => {
