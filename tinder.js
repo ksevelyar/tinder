@@ -9,8 +9,8 @@ const $ = selector => document.querySelector(selector)
 const positiveChecks = {
   dev(desc) {
     return [
-      'elixir', 'phoenix', 'javascript', 'vue', 'rust', 'sql',
-      ' git', 'programm', 'dev'
+      'elixir', 'phoenix', 'javascript', ' vue ', 'rust', 'sql',
+      ' git', 'programm', ' dev'
     ].some(substring => desc.includes(substring))
   },
   devops(desc) {
@@ -57,16 +57,12 @@ const negativeChecks = {
       'вecы',
       'cкopпиoн',
       'cтpeлeц',
-      'православ', 'christian'
+      'православ', 'christian',
+      'астролог', 'эзотерик'
     ].some(substring => desc.includes(substring))
   },
   emptyProfile(desc) {
-    return desc.length < 10 ||
-      desc.includes('kilometers away') ||
-      desc.includes('lives in') ||
-      desc.includes('inst', 'инст') && desc.length < 42 ||
-      desc.includes('@') && desc.length < 20 ||
-      desc.includes('рост') && desc.length < 20
+    return desc.includes('kilometers away') || desc.includes('lives in')
   },
   fraud(desc) {
     return desc.includes('не скупого') ||
@@ -75,10 +71,12 @@ const negativeChecks = {
       desc.includes('ищу спонсора') ||
       desc.includes('модель ню') ||
       desc.includes('ищу щедрого') ||
+      desc.includes('щедрый') ||
       desc.includes('приветик') ||
       desc.includes('не жадного') ||
       desc.includes('билет в театр') ||
       desc.includes('здесь редко') ||
+      desc.includes('здесь не сижу') ||
       desc.includes('тут не сижу') ||
       desc.includes('тут бываю редко')
   },
@@ -153,7 +151,7 @@ const filter = {
     return descNode
   },
   fetchDescription() {
-    const descriptionNode = filter.getElementByXpath('//*[@id="content"]/div/div[1]/div/main/div[1]/div/div/div[1]/div/div[1]/div[3]/div[6]/div/div[2]/div/div')
+    const descriptionNode = filter.getElementByXpath('//*[@id="content"]/div/div[1]/div/main/div[1]/div/div/div[1]/div/div[1]/div[3]/div[3]/div/div[2]/div/div[2]')
 
     if (descriptionNode) {
       const description = descriptionNode.innerText
@@ -167,12 +165,13 @@ const filter = {
   },
 
   call() {
-    const description = filter.fetchDescription()
-    const desc = description.toLowerCase()
+    const rawDescription = filter.fetchDescription() || ''
+
+    const desc = rawDescription.toLowerCase()
 
     const nothingNegative = Object.keys(positiveChecks).every(positiveCheck => {
       if (positiveChecks[positiveCheck](desc)) {
-        actions.yes(positiveCheck, description)
+        actions.yes(positiveCheck, rawDescription)
         return false
       }
       return true
@@ -181,30 +180,32 @@ const filter = {
 
     const nothingPositive = Object.keys(negativeChecks).every(negativeCheck => {
       if (negativeChecks[negativeCheck](desc)) {
-        actions.nope(negativeCheck, description)
+        actions.nope(negativeCheck, rawDescription)
         return false
       }
       return true
     })
     if (!nothingPositive) {return }
 
-    console.log('?', `\n\n${description}\n\n`)
+    console.log('?', `\n\n${rawDescription}\n\n`)
     window.reloadTimer = setTimeout(() => {
-      console.log('🤖')
+      console.log('🤖 Your turn human')
       location.reload()
     }, filter.delay(120000))
   }
 }
 
 window.addEventListener('load', () => {
-  setTimeout(filter.call, filter.delay(4000))
+  setTimeout(filter.call, filter.delay(5000))
 
   $('.recsCardboard').style.maxWidth = '640px'
   $('.recsCardboard').style.height = '900px'
 }, false)
+
 document.addEventListener('keyup', (event) => {
   if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
     setTimeout(filter.call, filter.delay())
     clearTimeout(window.reloadTimer)
   }
 })
+
