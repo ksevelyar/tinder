@@ -46,24 +46,21 @@ const negativeChecks = {
   magicalThinker(desc) { // https://en.wikipedia.org/wiki/Magical_thinking
     return [
       '♈', '♉', '♊', '♋', '♌', '♍', '♎', '♐', '♑', '♒', '♓',
-      'кoзepoг',
-      'вoдoлeй',
-      'pыбы',
-      'oвeн',
-      'тeлeц',
-      'близнeцы',
-      'paк',
-      'лeв',
-      'дeвa',
-      'вecы',
-      'cкopпиoн',
-      'cтpeлeц',
+      'козерог',
+      'водолей',
+      'овен',
+      'телец',
+      'дева',
+      'весы',
+      'скорпион',
+      'стрелец',
       'православ', 'christian',
-      'астролог', 'эзотерик'
+      'astrolog', 'астролог', 'эзотерик'
     ].some(substring => desc.includes(substring))
   },
   emptyProfile(desc) {
-    return desc.includes('kilometers away') || desc.includes('lives in')
+    return desc.includes('kilometers away') || desc.includes('lives in') ||
+      desc.length < 30 && (desc.includes('@') || desc.includes('inst') || desc.includes('инст') )
   },
   fraud(desc) {
     return desc.includes('не скупого') ||
@@ -153,14 +150,19 @@ const filter = {
   },
   fetchDescription() {
     const variant1 = filter.getElementByXpath('//*[@id="content"]/div/div[1]/div/main/div[1]/div/div/div[1]/div[1]/div[1]/div[3]/div[3]/div/div[2]/div/div/div[2]')
+    // description
     const variant2 = filter.getElementByXpath('//*[@id="content"]/div/div[1]/div/main/div[1]/div/div/div[1]/div/div[1]/div[3]/div[3]/div/div[2]/div/div[2]')
     const variant3 = filter.getElementByXpath('//*[@id="content"]/div/div[1]/div/main/div[1]/div/div/div[1]/div/div[1]/div[3]/div[3]/div/div[2]/div/div')
 
-    const descriptionNode = variant1 || variant2 || variant3
+    console.log('v1', variant1)
+    console.log('v2', variant2)
+    console.log('v3', variant3)
+
+    const descriptionNode = variant2 || variant3
 
     if (descriptionNode) {
       const description = descriptionNode.innerText
-    
+
       filter.appendDescription()
       document.querySelector('#description').innerText = description
 
@@ -180,7 +182,7 @@ const filter = {
       }
       return true
     })
-    if (!nothingNegative) {return }
+    if (!nothingNegative) { return }
 
     const nothingPositive = Object.keys(negativeChecks).every(negativeCheck => {
       if (negativeChecks[negativeCheck](desc)) {
@@ -189,12 +191,11 @@ const filter = {
       }
       return true
     })
-    if (!nothingPositive) {return }
+    if (!nothingPositive) { return }
 
-    if(!rawDescription) { console.log('fail'); return }
+    if (!rawDescription) { console.log('fail'); return }
 
-    console.log('?', `\n\n${rawDescription}\n\n`)
-    console.log('🤖 Your turn human')
+    console.log('🤖 Your turn human', `\n\n${rawDescription}\n\n`)
   }
 }
 
