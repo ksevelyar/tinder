@@ -1,4 +1,5 @@
 
+
 // ==UserScript==
 // @name    dat_filter_tinder
 // @grant   none
@@ -11,7 +12,7 @@ const positiveChecks = {
   dev(desc) {
     return [
       'elixir', 'phoenix', 'javascript', ' vue ', 'rust', 'sql',
-      ' git', 'programm', ' dev'
+      ' git', 'github', 'programm', ' dev'
     ].some(substring => desc.includes(substring))
   },
   devops(desc) {
@@ -27,9 +28,6 @@ const positiveChecks = {
       'math', 'chemistry',
       'матем', 'хими'
     ].some(substring => desc.includes(substring))
-  },
-  feminism(desc) {
-    return desc.includes('femin') || desc.includes('фемин')
   },
   atheism(desc) {
     return desc.includes('atheism')
@@ -59,7 +57,8 @@ const negativeChecks = {
     ].some(substring => desc.includes(substring))
   },
   emptyProfile(desc) {
-    return desc.includes('kilometers away') || desc.includes('lives in') ||
+    return desc.length < 2 ||
+      desc.includes('kilometers away') || desc.includes('lives in') ||
       desc.length < 30 && (desc.includes('@') || desc.includes('inst') || desc.includes('инст') )
   },
   fraud(desc) {
@@ -149,18 +148,12 @@ const filter = {
     return descNode
   },
   fetchDescription() {
-    const variant1 = filter.getElementByXpath('//*[@id="content"]/div/div[1]/div/main/div[1]/div/div/div[1]/div[1]/div[1]/div[3]/div[3]/div/div[2]/div/div/div[2]')
-    // description
     const variant2 = filter.getElementByXpath('//*[@id="content"]/div/div[1]/div/main/div[1]/div/div/div[1]/div/div[1]/div[3]/div[3]/div/div[2]/div/div[2]')
     const variant3 = filter.getElementByXpath('//*[@id="content"]/div/div[1]/div/main/div[1]/div/div/div[1]/div/div[1]/div[3]/div[3]/div/div[2]/div/div')
 
-    console.log('v1', variant1)
-    console.log('v2', variant2)
-    console.log('v3', variant3)
-
     const descriptionNode = variant2 || variant3
 
-    if (descriptionNode) {
+    if (descriptionNode && Array.from(descriptionNode.classList).includes('BreakWord')) {
       const description = descriptionNode.innerText
 
       filter.appendDescription()
@@ -168,11 +161,12 @@ const filter = {
 
       return description
     }
+
+    return ''
   },
 
   call() {
-    const rawDescription = filter.fetchDescription() || ''
-
+    const rawDescription = filter.fetchDescription()
     const desc = rawDescription.toLowerCase()
 
     const nothingNegative = Object.keys(positiveChecks).every(positiveCheck => {
@@ -193,8 +187,6 @@ const filter = {
     })
     if (!nothingPositive) { return }
 
-    if (!rawDescription) { console.log('fail'); return }
-
     console.log('🤖 Your turn human', `\n\n${rawDescription}\n\n`)
   }
 }
@@ -212,4 +204,3 @@ document.addEventListener('keyup', (event) => {
     clearTimeout(window.reloadTimer)
   }
 })
-
