@@ -103,22 +103,23 @@ const negativeChecks = {
 
 const actions = {
   nope(reason, description) {
-    const dislikeButton = $('[aria-label="Nope"]')
+    console.log(`[NOPE: ${reason}]`, description)
+    const dislikeButton = filter.getElementByXpath('//*[@id="content"]/div/div[1]/div/main/div[1]/div/div/div[1]/div/div[2]/div[2]/button')
+
     if (!dislikeButton) {
       return
     }
 
-    console.log(`[NOPE: ${reason}]`, description)
     dislikeButton.click()
     setTimeout(filter.call, 1000)
   },
   yes(reason, description) {
+    console.log(`[YES: ${reason}]`, description)
     const likeButton = $('[aria-label="Like"]') || $('[aria-label="Лайк"]')
     if (!likeButton) {
       return
     }
 
-    console.log(`[YES: ${reason}]`, description)
     likeButton.click()
     setTimeout(filter.call, 1000)
   }
@@ -167,6 +168,7 @@ const filter = {
 
   call() {
     const rawDescription = filter.fetchDescription()
+    // console.log(rawDescription)
     const desc = rawDescription.toLowerCase()
 
     const nothingNegative = Object.keys(positiveChecks).every(positiveCheck => {
@@ -193,9 +195,6 @@ const filter = {
 
 window.addEventListener('load', () => {
   setTimeout(filter.call, filter.delay(5000))
-
-  $('.recsCardboard').style.maxWidth = '640px'
-  $('.recsCardboard').style.height = '900px'
 }, false)
 
 document.addEventListener('keyup', (event) => {
@@ -204,3 +203,4 @@ document.addEventListener('keyup', (event) => {
     clearTimeout(window.reloadTimer)
   }
 })
+
