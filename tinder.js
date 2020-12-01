@@ -1,5 +1,3 @@
-
-
 // ==UserScript==
 // @name    dat_filter_tinder
 // @grant   none
@@ -41,7 +39,7 @@ const positiveChecks = {
 }
 
 const negativeChecks = {
-  magicalThinker(desc) { // https://en.wikipedia.org/wiki/Magical_thinking
+  magicalThinker(desc) { 
     return [
       '♈', '♉', '♊', '♋', '♌', '♍', '♎', '♐', '♑', '♒', '♓',
       'козерог',
@@ -168,7 +166,6 @@ const filter = {
 
   call() {
     const rawDescription = filter.fetchDescription()
-    // console.log(rawDescription)
     const desc = rawDescription.toLowerCase()
 
     const nothingNegative = Object.keys(positiveChecks).every(positiveCheck => {
