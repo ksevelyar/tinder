@@ -4,7 +4,7 @@
 // @include https://tinder.com/app/recs
 // ==/UserScript==
 
-const dislikeButtonXpath = 
+const dislikeButtonXpath =
   '//*[@id="content"]/div/div[1]/div/main/div[1]/div/div/div[1]/div/div[2]/div[2]/button'
 const likeButtonXpath =
   '//*[@id="content"]/div/div[1]/div/main/div[1]/div/div/div[1]/div/div[2]/div[4]/button'
@@ -42,7 +42,7 @@ const positiveChecks = {
 }
 
 const negativeChecks = {
-  magicalThinker(desc) { 
+  magicalThinker(desc) {
     return [
       '♈', '♉', '♊', '♋', '♌', '♍', '♎', '♐', '♑', '♒', '♓',
       'козерог',
@@ -63,20 +63,22 @@ const negativeChecks = {
       desc.length < 30 && (desc.includes('@') || desc.includes('inst') || desc.includes('инст') )
   },
   fraud(desc) {
-    return desc.includes('не скупого') ||
-      desc.includes('папик') ||
-      desc.includes('вирт ') ||
-      desc.includes('ищу спонсора') ||
-      desc.includes('модель ню') ||
-      desc.includes('ищу щедрого') ||
-      desc.includes('щедрый') ||
-      desc.includes('приветик') ||
-      desc.includes('не жадного') ||
-      desc.includes('билет в театр') ||
-      desc.includes('здесь редко') ||
-      desc.includes('здесь не сижу') ||
-      desc.includes('тут не сижу') ||
-      desc.includes('тут бываю редко')
+    return [
+      'не скупого',
+      'папик',
+      'вирт ',
+      'ищу спонсора',
+      'модель ню',
+      'ищу щедрого',
+      'щедрый',
+      'приветик',
+      'не жадного',
+      'билет в театр',
+      'здесь редко',
+      'здесь не сижу',
+      'тут не сижу',
+      'тут бываю редко'
+    ].some(substring => desc.includes(substring))
   },
   kids(desc) {
     return desc.includes('есть сын') ||
