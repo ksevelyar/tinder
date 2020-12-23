@@ -4,7 +4,10 @@
 // @include https://tinder.com/app/recs
 // ==/UserScript==
 
-const $ = selector => document.querySelector(selector)
+const dislikeButtonXpath = 
+  '//*[@id="content"]/div/div[1]/div/main/div[1]/div/div/div[1]/div/div[2]/div[2]/button'
+const likeButtonXpath =
+  '//*[@id="content"]/div/div[1]/div/main/div[1]/div/div/div[1]/div/div[2]/div[4]/button'
 
 const positiveChecks = {
   dev(desc) {
@@ -28,13 +31,13 @@ const positiveChecks = {
     ].some(substring => desc.includes(substring))
   },
   atheism(desc) {
-    return desc.includes('atheism')
+    return desc.includes('atheis')
   },
   chill(desc) {
     return ['420', '4:20', '🍄'].some(substring => desc.includes(substring))
   },
   books(desc) {
-    return ['blindsight', 'sapolsky'].some(substring => desc.includes(substring))
+    return ['blindsight', 'sapolsky', 'dawkins', 'catch-22'].some(substring => desc.includes(substring))
   }
 }
 
@@ -102,21 +105,16 @@ const negativeChecks = {
 const actions = {
   nope(reason, description) {
     console.log(`[NOPE: ${reason}]`, description)
-    const dislikeButton = filter.getElementByXpath('//*[@id="content"]/div/div[1]/div/main/div[1]/div/div/div[1]/div/div[2]/div[2]/button')
-
-    if (!dislikeButton) {
-      return
-    }
+    const dislikeButton = filter.getElementByXpath(dislikeButtonXpath)
+    if (!dislikeButton) { return console.log('🤖 Dislike button not found, update xpath') }
 
     dislikeButton.click()
     setTimeout(filter.call, 1000)
   },
   yes(reason, description) {
     console.log(`[YES: ${reason}]`, description)
-    const likeButton = $('[aria-label="Like"]') || $('[aria-label="Лайк"]')
-    if (!likeButton) {
-      return
-    }
+    const likeButton = filter.getElementByXpath(likeButtonXpath)
+    if (!likeButton) { return console.log('🤖 Like button not found, update xpath') }
 
     likeButton.click()
     setTimeout(filter.call, 1000)
@@ -127,66 +125,32 @@ const filter = {
   delay(extraDelay = 0) {
     return Math.ceil(Math.random() * 1000 + 500 + extraDelay)
   },
-
   getElementByXpath(path) {
     return document.evaluate(path, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue
   },
-  appendDescription() {
-    const existedDescNode = document.querySelector('#description')
-    if (existedDescNode) {return existedDescNode}
-
-    const descNode = document.createElement('div')
-    descNode.id = 'description'
-    descNode.style.position = 'absolute'
-    descNode.style.background = '#fff'
-    descNode.style.left = '10px'
-    descNode.style.top = '500px'
-    descNode.style.width = '320px'
-    document.body.appendChild(descNode)
-
-    return descNode
-  },
   fetchDescription() {
-    const variant2 = filter.getElementByXpath('//*[@id="content"]/div/div[1]/div/main/div[1]/div/div/div[1]/div/div[1]/div[3]/div[3]/div/div[2]/div/div[2]')
-    const variant3 = filter.getElementByXpath('//*[@id="content"]/div/div[1]/div/main/div[1]/div/div/div[1]/div/div[1]/div[3]/div[3]/div/div[2]/div/div')
+    const variant0 = filter.getElementByXpath('//*[@id="content"]/div/div[1]/div/main/div[1]/div/div/div[1]/div/div[1]/div[3]/div[3]/div/div[2]/div/div[2]')
+    const variant1 = filter.getElementByXpath('//*[@id="content"]/div/div[1]/div/main/div[1]/div/div/div[1]/div/div[1]/div[3]/div[3]/div/div[2]/div/div')
 
-    const descriptionNode = variant2 || variant3
+    const descriptionNode = variant0 || variant1
 
     if (descriptionNode && Array.from(descriptionNode.classList).includes('BreakWord')) {
-      const description = descriptionNode.innerText
-
-      filter.appendDescription()
-      document.querySelector('#description').innerText = description
-
-      return description
+      return descriptionNode.innerText
     }
 
     return ''
   },
-
   call() {
     const rawDescription = filter.fetchDescription()
     const desc = rawDescription.toLowerCase()
 
-    const nothingNegative = Object.keys(positiveChecks).every(positiveCheck => {
-      if (positiveChecks[positiveCheck](desc)) {
-        actions.yes(positiveCheck, rawDescription)
-        return false
-      }
-      return true
-    })
-    if (!nothingNegative) { return }
+    const coolStuff = Object.keys(positiveChecks).find(positiveCheck => positiveChecks[positiveCheck](desc))
+    if (coolStuff) { return actions.yes(coolStuff, rawDescription) }
 
-    const nothingPositive = Object.keys(negativeChecks).every(negativeCheck => {
-      if (negativeChecks[negativeCheck](desc)) {
-        actions.nope(negativeCheck, rawDescription)
-        return false
-      }
-      return true
-    })
-    if (!nothingPositive) { return }
+    const dealbreaker = Object.keys(negativeChecks).find(negativeCheck => negativeChecks[negativeCheck](desc))
+    if (dealbreaker) { return actions.nope(dealbreaker, rawDescription) }
 
-    console.log('🤖 Your turn human', `\n\n${rawDescription}\n\n`)
+    console.log('🤖 Your turn human', `\n\n${rawDescription}\n`)
   }
 }
 
@@ -200,4 +164,3 @@ document.addEventListener('keyup', (event) => {
     clearTimeout(window.reloadTimer)
   }
 })
-
