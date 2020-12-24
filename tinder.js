@@ -141,10 +141,8 @@ const filter = {
     return document.evaluate(path, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue
   },
   fetchDescription() {
-    const variant0 = filter.getElementByXpath(descriptionVariant0)
-    const variant1 = filter.getElementByXpath(descriptionVariant1)
-
-    const descriptionNode = variant0 || variant1
+    const descriptionNode = filter.getElementByXpath(descriptionVariant0) ||
+      filter.getElementByXpath(descriptionVariant1)
 
     if (descriptionNode && Array.from(descriptionNode.classList).includes('BreakWord')) {
       return descriptionNode.innerText
