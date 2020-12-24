@@ -18,30 +18,33 @@ const positiveChecks = {
     return [
       'elixir', 'phoenix', 'javascript', ' vue ', 'rust', 'sql',
       ' git', 'github', 'programm', ' dev'
-    ].some(substring => desc.includes(substring))
+    ].some(string => desc.includes(string))
   },
   devops(desc) {
-    return ['linux', 'nix', 'k8s', 'bsd'].some(substring => {
-      desc.includes(substring)
+    return ['linux', 'nix', 'k8s', 'bsd'].some(string => {
+      desc.includes(string)
     })
   },
   microcontrollers(desc) {
-    return ['stm32', 'esp32', 'attiny', 'arduino'].some(substring => desc.includes(substring))
+    return ['stm32', 'esp32', 'attiny', 'arduino'].some(string => desc.includes(string))
+  },
+  printer(desc) {
+    return ['3d-print', 'ender'].some(string => desc.includes(string))
   },
   science(desc) {
     return [
       'math', 'chemistry',
       'матем', 'хими'
-    ].some(substring => desc.includes(substring))
+    ].some(string => desc.includes(string))
   },
   atheism(desc) {
     return desc.includes('atheis')
   },
   chill(desc) {
-    return ['420', '4:20', '🍄'].some(substring => desc.includes(substring))
+    return ['420', '4:20', '🍄'].some(string => desc.includes(string))
   },
   books(desc) {
-    return ['blindsight', 'sapolsky', 'dawkins', 'catch-22'].some(substring => desc.includes(substring))
+    return ['blindsight', 'sapolsky', 'dawkins', 'catch-22'].some(string => desc.includes(string))
   }
 }
 
@@ -49,10 +52,10 @@ const negativeChecks = {
   magicalThinker(desc) {
     return [
       '♈', '♉', '♊', '♋', '♌', '♍', '♎', '♐', '♑', '♒', '♓',
-      'козерог', 'водолей', 'овен', 'телец', 'дева', 'весы', 'скорпион', 'стрелец', 
+      'козерог', 'водолей', 'овен', 'телец', 'дева', 'весы', 'скорпион', 'стрелец',
       'православ', 'christian',
       'astrolog', 'астролог', 'эзотерик'
-    ].some(substring => desc.includes(substring))
+    ].some(string => desc.includes(string))
   },
   emptyProfile(desc) {
     return desc.length < 2 ||
@@ -75,7 +78,7 @@ const negativeChecks = {
       'здесь не сижу',
       'тут не сижу',
       'тут бываю редко'
-    ].some(substring => desc.includes(substring))
+    ].some(string => desc.includes(string))
   },
   kids(desc) {
     return desc.includes('есть сын') ||
@@ -97,7 +100,13 @@ const negativeChecks = {
       'любимого', 'ухаживать', 'хочу влюбиться', 'половинку',
       'мужа', 'женат', 'жених',
       'леди'
-    ].some(substring => desc.includes(substring))
+    ].some(string => desc.includes(string))
+  },
+  heightFilter(desc) {
+    const h17x = desc.match(/17(\d)/)
+    const isHigherThan174 = (h17x && h17x[1] && h17x[1] > 4)
+
+    return /18\d/.test(desc) || /19\d/.test(desc) || isHigherThan174
   }
 }
 
