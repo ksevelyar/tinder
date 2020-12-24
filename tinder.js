@@ -8,6 +8,10 @@ const dislikeButtonXpath =
   '//*[@id="content"]/div/div[1]/div/main/div[1]/div/div/div[1]/div/div[2]/div[2]/button'
 const likeButtonXpath =
   '//*[@id="content"]/div/div[1]/div/main/div[1]/div/div/div[1]/div/div[2]/div[4]/button'
+const descriptionVariant0 =
+  '//*[@id="content"]/div/div[1]/div/main/div[1]/div/div/div[1]/div/div[1]/div[3]/div[3]/div/div[2]/div/div[2]'
+const descriptionVariant1 =
+  '//*[@id="content"]/div/div[1]/div/main/div[1]/div/div/div[1]/div/div[1]/div[3]/div[3]/div/div[2]/div/div'
 
 const positiveChecks = {
   dev(desc) {
@@ -45,14 +49,7 @@ const negativeChecks = {
   magicalThinker(desc) {
     return [
       '♈', '♉', '♊', '♋', '♌', '♍', '♎', '♐', '♑', '♒', '♓',
-      'козерог',
-      'водолей',
-      'овен',
-      'телец',
-      'дева',
-      'весы',
-      'скорпион',
-      'стрелец',
+      'козерог', 'водолей', 'овен', 'телец', 'дева', 'весы', 'скорпион', 'стрелец', 
       'православ', 'christian',
       'astrolog', 'астролог', 'эзотерик'
     ].some(substring => desc.includes(substring))
@@ -131,8 +128,8 @@ const filter = {
     return document.evaluate(path, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue
   },
   fetchDescription() {
-    const variant0 = filter.getElementByXpath('//*[@id="content"]/div/div[1]/div/main/div[1]/div/div/div[1]/div/div[1]/div[3]/div[3]/div/div[2]/div/div[2]')
-    const variant1 = filter.getElementByXpath('//*[@id="content"]/div/div[1]/div/main/div[1]/div/div/div[1]/div/div[1]/div[3]/div[3]/div/div[2]/div/div')
+    const variant0 = filter.getElementByXpath(descriptionVariant0)
+    const variant1 = filter.getElementByXpath(descriptionVariant1)
 
     const descriptionNode = variant0 || variant1
 
