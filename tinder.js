@@ -1,4 +1,5 @@
 // ==UserScript==
+// @author  ksevelyar
 // @name    dat_filter_tinder
 // @grant   none
 // @include https://tinder.com/app/recs
@@ -17,13 +18,11 @@ const positiveChecks = {
   dev(desc) {
     return [
       'elixir', 'phoenix', 'javascript', ' vue ', 'rust', 'sql',
-      ' git', 'github', 'programm', ' dev'
+      ' git', 'github', 'programm', 'developer', 'machine learning'
     ].some(string => desc.includes(string))
   },
   devops(desc) {
-    return ['linux', 'nix', 'k8s', 'bsd'].some(string => {
-      desc.includes(string)
-    })
+    return ['linux', 'nix', 'k8s', 'bsd'].some(string => desc.includes(string))
   },
   microcontrollers(desc) {
     return ['stm32', 'esp32', 'attiny', 'arduino'].some(string => desc.includes(string))
@@ -32,10 +31,7 @@ const positiveChecks = {
     return ['3d-print', 'ender'].some(string => desc.includes(string))
   },
   science(desc) {
-    return [
-      'math', 'chemistry',
-      'матем', 'хими'
-    ].some(string => desc.includes(string))
+    return ['math', 'chemi', 'матем', 'хими'].some(string => desc.includes(string))
   },
   atheism(desc) {
     return desc.includes('atheis')
@@ -44,7 +40,15 @@ const positiveChecks = {
     return ['420', '4:20', '🍄'].some(string => desc.includes(string))
   },
   books(desc) {
-    return ['blindsight', 'sapolsky', 'dawkins', 'catch-22'].some(string => desc.includes(string))
+    return [
+      'blindsight', 'sapolsky', 'dawkins', 'catch-22', 'град обреченный'
+    ].some(string => desc.includes(string))
+  },
+  games(desc) {
+    return [
+      'fallout', 'quake', 'dungeon keeper', 'deus ex', 'morrowind',
+      'system shock', 'baldur\'s gate', 'vice city'
+    ].some(string => desc.includes(string))
   }
 }
 
