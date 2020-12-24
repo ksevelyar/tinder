@@ -47,7 +47,7 @@ const positiveChecks = {
   games(desc) {
     return [
       'fallout', 'quake', 'dungeon keeper', 'deus ex', 'morrowind',
-      'system shock', 'baldur\'s gate', 'vice city'
+      'system shock', 'baldur\'s gate', 'vice city', 'grim fandango'
     ].some(string => desc.includes(string))
   }
 }
