@@ -17,7 +17,7 @@ const descriptionVariant1 =
 const positiveChecks = {
   dev(desc) {
     return [
-      'elixir', 'phoenix', 'javascript', ' vue ', 'rust', 'sql',
+      'elixir', 'phoenix', 'javascript', ' vue ', ' rust', ' sql',
       ' git', 'github', 'programm', 'developer', 'machine learning'
     ].some(string => desc.includes(string))
   },
