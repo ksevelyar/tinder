@@ -28,7 +28,7 @@ const positiveChecks = {
     return ['stm32', 'esp32', 'attiny', 'arduino'].some(string => desc.includes(string))
   },
   printer(desc) {
-    return ['3d-print', 'ender'].some(string => desc.includes(string))
+    return ['3d-print', ' ender'].some(string => desc.includes(string))
   },
   atheism(desc) {
     return desc.includes('atheis')
