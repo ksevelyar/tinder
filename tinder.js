@@ -162,7 +162,7 @@ const filter = {
     const dealbreaker = Object.keys(negativeChecks).find(negativeCheck => negativeChecks[negativeCheck](desc))
     if (dealbreaker) { return actions.nope(dealbreaker, rawDescription) }
 
-    console.log('🤖 Your turn human', `\n\n${rawDescription}\n`)
+    console.log(`🤖 Your turn human, swipe or improve me\n\n${rawDescription}\n`)
   }
 }
 
