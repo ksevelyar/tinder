@@ -30,9 +30,6 @@ const positiveChecks = {
   printer(desc) {
     return ['3d-print', 'ender'].some(string => desc.includes(string))
   },
-  science(desc) {
-    return ['math', 'chemi', 'матем', 'хими'].some(string => desc.includes(string))
-  },
   atheism(desc) {
     return desc.includes('atheis')
   },
