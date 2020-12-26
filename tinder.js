@@ -61,7 +61,8 @@ const negativeChecks = {
   emptyProfile(desc) {
     return desc.length < 2 ||
       desc.includes('kilometers away') || desc.includes('lives in') ||
-      desc.length < 30 && (desc.includes('@') || desc.includes('inst') || desc.includes('инст') )
+      desc.length < 30 && (desc.includes('@') || desc.includes('inst') || desc.includes('инст') ) ||
+      desc.length < 20 && /\d{3}/.test(desc)
   },
   sexTrafficking(desc) {
     return [
