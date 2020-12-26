@@ -52,7 +52,7 @@ const positiveChecks = {
 const negativeChecks = {
   magicalThinker(desc) {
     return [
-      '♈', '♉', '♊', '♋', '♌', '♍', '♎', '♐', '♑', '♒', '♓',
+      '♈', '♉', '♊', '♋', '♌', '♍', '♏️', '♎', '♐', '♑', '♒', '♓',
       'козерог', 'водолей', 'овен', 'телец', 'дева', 'весы', 'скорпион', 'стрелец',
       'православ', 'christian',
       'astrolog', 'астролог', 'эзотерик'
@@ -63,22 +63,17 @@ const negativeChecks = {
       desc.includes('kilometers away') || desc.includes('lives in') ||
       desc.length < 30 && (desc.includes('@') || desc.includes('inst') || desc.includes('инст') )
   },
+  sexTrafficking(desc) {
+    return [
+      'не скупого', 'папик', 'ищу спонсора', 'интим',
+      'не жадного', 'ищу щедрого', 'щедрый', 
+    ].some(string => desc.includes(string))
+  },
   fraud(desc) {
     return [
-      'не скупого',
-      'папик',
-      'вирт ',
-      'ищу спонсора',
-      'модель ню',
-      'ищу щедрого',
-      'щедрый',
-      'приветик',
-      'не жадного',
-      'билет в театр',
-      'здесь редко',
-      'здесь не сижу',
-      'тут не сижу',
-      'тут бываю редко'
+      'вирт ', 'модель ню', 'интим', 'приветик', 'в театр',
+      'здесь редко', 'здесь не сижу', 'тут не сижу', 'тут бываю редко',
+      'пишите в ', 'пиши в '
     ].some(string => desc.includes(string))
   },
   kids(desc) {
@@ -108,7 +103,7 @@ const negativeChecks = {
     const isHigherThan174 = (h17x && h17x[1] && h17x[1] > 4)
 
     return /18\d/.test(desc) || /19\d/.test(desc) || isHigherThan174
-  }
+  },
 }
 
 const actions = {
