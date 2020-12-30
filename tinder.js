@@ -25,7 +25,7 @@ const positiveChecks = {
     return ['linux', 'nix', 'k8s', 'bsd'].some(string => desc.includes(string))
   },
   microcontrollers(desc) {
-    return ['stm32', 'esp32', 'attiny', 'arduino'].some(string => desc.includes(string))
+    return ['stm32', 'esp32', 'attiny', 'arduino', ' iot '].some(string => desc.includes(string))
   },
   printer(desc) {
     return ['3d-print', ' ender'].some(string => desc.includes(string))
@@ -67,14 +67,14 @@ const negativeChecks = {
   sexTrafficking(desc) {
     return [
       'не скупого', 'папик', 'ищу спонсора', 'интим',
-      'не жадного', 'ищу щедрого', 'щедрый', 
+      'не жадного', 'ищу щедрого', 'щедрый',
     ].some(string => desc.includes(string))
   },
   fraud(desc) {
     return [
-      'вирт ', 'модель ню', 'приветик', 'котики', 'в театр',
+      'вирт ', 'модель ню', 'приветик', 'в театр',
       'здесь редко', 'здесь не сижу', 'тут не сижу', 'тут бываю редко',
-      'пишите в ', 'пиши в ', 'буду ждать тебя в'
+      'пишите в ', 'пиши в ', 'буду ждать тебя в', 'напиши мне в '
     ].some(string => desc.includes(string))
   },
   kids(desc) {
@@ -95,8 +95,8 @@ const negativeChecks = {
   differentGoals(desc) {
     return [
       'любимого', 'ухаживать', 'хочу влюбиться', 'половинку',
-      'мужа', 'женат', 'жених', 
-      'леди', 'принц', 'забери меня'
+      'мужа', 'женат', 'жених', 'замуж',
+      'леди', 'принц', 'забери меня', '❌', '❗️', 'футбол', 'караоке'
     ].some(string => desc.includes(string))
   },
   heightFilter(desc) {
