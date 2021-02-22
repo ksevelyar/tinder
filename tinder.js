@@ -5,15 +5,6 @@
 // @include https://tinder.com/app/recs
 // ==/UserScript==
 
-const dislikeButtonXpath =
-  '//*[@id="content"]/div/div[1]/div/main/div[1]/div/div/div[1]/div/div[2]/div[2]/button'
-const likeButtonXpath =
-  '//*[@id="content"]/div/div[1]/div/main/div[1]/div/div/div[1]/div/div[2]/div[4]/button'
-const descriptionVariant0 =
-  '//*[@id="content"]/div/div[1]/div/main/div[1]/div/div/div[1]/div/div[1]/div[3]/div[3]/div/div[2]/div/div[2]'
-const descriptionVariant1 =
-  '//*[@id="content"]/div/div[1]/div/main/div[1]/div/div/div[1]/div/div[1]/div[3]/div[3]/div/div[2]/div/div'
-
 const positiveChecks = {
   dev(desc) {
     return [
@@ -110,16 +101,16 @@ const negativeChecks = {
 const actions = {
   nope(reason, description) {
     console.log(`[NOPE: ${reason}]`, description)
-    const dislikeButton = filter.getElementByXpath(dislikeButtonXpath)
-    if (!dislikeButton) { return console.log('🤖 Dislike button not found, update xpath') }
+    const dislikeButton = document.querySelectorAll('.button')[1]
+    if (!dislikeButton) { return console.log('🤖 Dislike button not found') }
 
     dislikeButton.click()
     setTimeout(filter.call, 1000)
   },
   yes(reason, description) {
     console.log(`[YES: ${reason}]`, description)
-    const likeButton = filter.getElementByXpath(likeButtonXpath)
-    if (!likeButton) { return console.log('🤖 Like button not found, update xpath') }
+    const likeButton = document.querySelectorAll('.button')[3]
+    if (!likeButton) { return console.log('🤖 Like button not found') }
 
     likeButton.click()
     setTimeout(filter.call, 1000)
@@ -130,14 +121,11 @@ const filter = {
   delay(extraDelay = 0) {
     return Math.ceil(Math.random() * 1000 + 500 + extraDelay)
   },
-  getElementByXpath(path) {
-    return document.evaluate(path, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue
-  },
   fetchDescription() {
-    const descriptionNode = filter.getElementByXpath(descriptionVariant0) ||
-      filter.getElementByXpath(descriptionVariant1)
+    const descriptionVariant0 = "[aria-hidden='false'] .BreakWord"
+    const descriptionNode = document.querySelector(descriptionVariant0)
 
-    if (descriptionNode && Array.from(descriptionNode.classList).includes('BreakWord')) {
+    if (descriptionNode) {
       return descriptionNode.innerText
     }
 
