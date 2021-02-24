@@ -132,6 +132,11 @@ const filter = {
     return ''
   },
   call() {
+    const noThanks = Array.from(document.querySelectorAll('.button span')).find(
+      button => button.innerText == 'NO THANKS'
+    )
+    if (noThanks) { window.location.reload() }
+
     const rawDescription = filter.fetchDescription()
     const desc = rawDescription.toLowerCase()
 
