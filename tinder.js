@@ -14,8 +14,14 @@ const checks = {
       'astrolog', 'астролог', 'эзотерик'
     ].some(string => desc.includes(string))
   },
+  tooSmartForAstrology(desc) {
+    return ['istj', 'isfj', 'infj', 'intj',
+      'istp', 'isfp', 'infp', 'intp',
+      'estp', 'esfp', 'enfp', 'entp',
+      'estj', 'esfj', 'enfj', 'entj'].some(string => desc.includes(string))
+  },
   emptyProfile(desc) {
-    return desc.length < 1 ||
+    return desc.length < 10 ||
       desc.includes('kilometers away') || desc.includes('lives in') ||
       desc.length < 30 && (desc.includes('@') || desc.includes('inst') || desc.includes('инст') ) ||
       desc.length < 20 && /\d{3}/.test(desc)
@@ -57,6 +63,14 @@ const checks = {
     const isHigherThan174 = (h17x && h17x[1] && h17x[1] > 4)
 
     return /18\d/.test(desc) || /19\d/.test(desc) || isHigherThan174
+  },
+  genderRoles(desc) {
+    return desc.includes('мужчин') || desc.includes('женщин')
+  },
+  corny(desc) {
+    return [
+      'зачем тебе умному', 'сапиосексуал', 'бог дал тебе'
+    ].some(string => desc.includes(string))
   },
 }
 
