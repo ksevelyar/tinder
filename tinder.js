@@ -109,6 +109,7 @@ const filter = {
     if (dealbreaker) { return filter.nope(dealbreaker, rawDescription) }
 
     console.log(`🤖 Your turn human, swipe or improve me\n\n${rawDescription}\n`)
+    window.reloadTimer = setTimeout(window.location.reload.bind(window.location), 60000)
   }
 }
 
