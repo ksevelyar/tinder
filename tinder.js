@@ -22,9 +22,8 @@ const checks = {
   },
   emptyProfile(desc) {
     return desc.length < 10 ||
-      desc.includes('kilometers away') || desc.includes('lives in') ||
-      desc.length < 30 && (desc.includes('@') || desc.includes('inst') || desc.includes('инст') ) ||
-      desc.length < 20 && /\d{3}/.test(desc)
+      desc.includes('s away') || desc.includes('lives in') ||
+      desc.length < 30 && (desc.includes('@') || desc.includes('inst') || desc.includes('инст'))
   },
   sexTrafficking(desc) {
     return [
@@ -54,8 +53,8 @@ const checks = {
   differentGoals(desc) {
     return [
       'любимого', 'ухаживать', 'хочу влюбиться', 'половинку',
-      'женат', 'жених', 
-      'леди', 'принц', 'забери меня', '❌', '❗️', 'футбол', 'караоке'
+      'женат', 'жених', 'бачат', '🖇',
+      '❌', '❗️', 'футбол', 'караоке'
     ].some(string => desc.includes(string))
   },
   heightFilter(desc) {
@@ -70,6 +69,12 @@ const checks = {
   corny(desc) {
     return [
       'зачем тебе умному', 'сапиосексуал', 'бог дал тебе'
+    ].some(string => desc.includes(string))
+  },
+  narcissism(desc) {
+    return [
+      'вредная', 'скучаю', 'душн', 'адекватн', 'на манеже', 'на базе',
+      'леди', 'принц', 'забери меня',
     ].some(string => desc.includes(string))
   },
 }
@@ -89,7 +94,7 @@ const filter = {
     return ''
   },
   nope(reason, description) {
-    console.log(`[NOPE: ${reason}]`, description)
+    console.log(`%c[NOPE: ${reason}]`, 'background: #000; color: #7f00ff', description)
     const dislikeButton = document.querySelectorAll('.button')[1]
     if (!dislikeButton) { return console.log('🤖 Dislike button not found') }
 
@@ -109,7 +114,7 @@ const filter = {
     if (dealbreaker) { return filter.nope(dealbreaker, rawDescription) }
 
     console.log(`🤖 Your turn human, swipe or improve me\n\n${rawDescription}\n`)
-    window.reloadTimer = setTimeout(window.location.reload.bind(window.location), 60000)
+    window.reloadTimer = setTimeout(window.location.reload.bind(window.location), 3 * 60000)
   }
 }
 
