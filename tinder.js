@@ -53,8 +53,8 @@ const checks = {
   differentGoals(desc) {
     return [
       'любимого', 'ухаживать', 'хочу влюбиться', 'половинку',
-      'женат', 'жених', 'бачат', '🖇',
-      '❌', '❗️', 'футбол', 'караоке'
+      'женат', 'жених', 'замуж', 'бачат', '🖇',
+      '❌', '❗️', 'футбол', 'караоке', 'понравлюсь твоей маме'
     ].some(string => desc.includes(string))
   },
   heightFilter(desc) {
@@ -68,7 +68,7 @@ const checks = {
   },
   corny(desc) {
     return [
-      'зачем тебе умному', 'сапиосексуал', 'бог дал тебе'
+      'зачем тебе умному', 'сапиосексуал', 'бог дал тебе', 'абсолютно понятен'
     ].some(string => desc.includes(string))
   },
   narcissism(desc) {
@@ -77,6 +77,10 @@ const checks = {
       'леди', 'принц', 'забери меня',
     ].some(string => desc.includes(string))
   },
+  adjectivesSayNothing(desc) {
+    const adjectivesCount = desc.match(/ная/g) || []
+    return adjectivesCount.length > 4
+  }
 }
 
 const filter = {
@@ -99,7 +103,7 @@ const filter = {
     if (!dislikeButton) { return console.log('🤖 Dislike button not found') }
 
     dislikeButton.click()
-    setTimeout(filter.call, 1000)
+    setTimeout(filter.call, 900)
   },
   call() {
     const noThanks = Array.from(document.querySelectorAll('.button span')).find(
