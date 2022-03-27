@@ -78,8 +78,8 @@ const checks = {
     ].some(string => desc.includes(string))
   },
   adjectivesSayNothing(desc) {
-    const adjectivesCount = desc.match(/ная/g) || []
-    return adjectivesCount.length > 4
+    const adjectives = desc.match(/ная/g) || []
+    return adjectives.length > 4
   }
 }
 
