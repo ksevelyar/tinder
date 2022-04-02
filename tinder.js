@@ -42,7 +42,7 @@ const checks = {
     return desc.includes('есть сын') ||
       desc.includes('есть дочь') ||
       desc.includes('есть дочка') ||
-      desc.includes('есть ребенок') ||
+      desc.includes('есть реб') ||
       desc.includes('мама сына')
   },
   'whySoSerious?'(desc) {
@@ -64,22 +64,28 @@ const checks = {
     return /18\d/.test(desc) || /19\d/.test(desc) || isHigherThan174
   },
   genderRoles(desc) {
-    return desc.includes('мужчин') || desc.includes('женщин')
+    return [
+      'мужчин', 'женщин',
+      'чтобы я написала тебе первая',
+      'первая не пишу', 'дай мне знать'
+    ].some(string => desc.includes(string))
+    || desc.includes('парн') && desc.includes('перв')
   },
   corny(desc) {
     return [
-      'зачем тебе умному', 'сапиосексуал', 'бог дал тебе', 'абсолютно понятен'
+      'зачем тебе умному', 'сапиосексуал', 'бог дал тебе', 'абсолютно понятен',
+      'иллюзия большого выбора', 'один здесь отдыхаешь'
     ].some(string => desc.includes(string))
   },
   narcissism(desc) {
     return [
       'вредная', 'скучаю', 'душн', 'адекватн', 'на манеже', 'на базе',
-      'леди', 'принц', 'забери меня',
+      'леди', 'принц', 'забери меня'
     ].some(string => desc.includes(string))
   },
   adjectivesSayNothing(desc) {
-    const adjectives = desc.match(/ная/g) || []
-    return adjectives.length > 4
+    const adjectivesCount = desc.match(/ая/g) || []
+    return (adjectivesCount.length > 5)
   }
 }
 

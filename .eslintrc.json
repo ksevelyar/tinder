@@ -1,31 +1,18 @@
 {
   "env": {
-    "browser": true,
-    "es6": true
+    "browser": true
   },
   "extends": [
     "eslint:recommended"
   ],
   "parserOptions": {
-    "ecmaVersion": 2021,
+    "ecmaVersion": "latest",
     "sourceType": "module"
   },
   "rules": {
-    "semi": [
-      1,
-      "never"
-    ],
+    "semi": [1, "never"],
     "indent": ["error", 2],
-    "object-curly-spacing": [
-      "error",
-      "always"
-    ],
-    "quotes": [
-      "error",
-      "single",
-      {
-        "avoidEscape": true
-      }
-    ]
+    "object-curly-spacing": ["error", "always"],
+    "quotes": ["error", "single", {"avoidEscape": true}]
   }
 }
