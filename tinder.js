@@ -10,15 +10,14 @@ const checks = {
     return [
       '♈', '♉', '♊', '♋', '♌', '♍', '♏️', '🦂', '♎', '♐', '♑', '♒', '♓',
       'козерог', 'водолей', 'овен', 'телец', 'дева', 'весы', 'скорпион', 'стрелец',
-      'православ', 'christian',
-      'astrolog', 'астролог', 'эзотерик'
+      'православ', 'christian', 'astrolog', 'астролог', 'эзотерик'
     ].some(string => desc.includes(string))
   },
   tooSmartForAstrology(desc) {
-    return ['istj', 'isfj', 'infj', 'intj',
-      'istp', 'isfp', 'infp', 'intp',
-      'estp', 'esfp', 'enfp', 'entp',
-      'estj', 'esfj', 'enfj', 'entj'].some(string => desc.includes(string))
+    return [
+      'istj', 'isfj', 'infj', 'intj', 'istp', 'isfp', 'infp', 'intp',
+      'estp', 'esfp', 'enfp', 'entp', 'estj', 'esfj', 'enfj', 'entj'
+    ].some(string => desc.includes(string))
   },
   emptyProfile(desc) {
     return desc.length < 10 ||
@@ -27,23 +26,18 @@ const checks = {
   },
   sexTrafficking(desc) {
     return [
-      'не скупого', 'папик', 'ищу спонсора', 'интим',
-      'не жадного', 'ищу щедрого', 'щедрый',
+      'не скупого', 'папик', 'ищу спонсора', 'интим', 'не жадного', 'ищу щедрого', 'щедрый'
     ].some(string => desc.includes(string))
   },
   fraud(desc) {
     return [
-      'вирт ', 'модель ню', 'приветик', 'в театр',
-      'здесь редко', 'здесь не сижу', 'тут не сижу', 'тут бываю редко',
-      'пишите в ', 'пиши в ', 'буду ждать тебя в', 'напиши мне в '
+      'вирт ', 'модель ню', 'приветик', 'в театр', 'здесь редко', 'здесь не сижу', 'тут не сижу',
+      'тут бываю редко', 'пишите в ', 'пиши в ', 'буду ждать тебя в', 'напиши мне в ',
+      'подари', 'скинь'
     ].some(string => desc.includes(string))
   },
   kids(desc) {
-    return desc.includes('есть сын') ||
-      desc.includes('есть дочь') ||
-      desc.includes('есть дочка') ||
-      desc.includes('есть реб') ||
-      desc.includes('мама сына')
+    return ['есть сын', 'есть доч', 'есть реб', 'мама сын'].some(string => desc.includes(string))
   },
   'whySoSerious?'(desc) {
     return desc.includes('серь') && desc.includes('отнош') ||
@@ -52,9 +46,8 @@ const checks = {
   },
   differentGoals(desc) {
     return [
-      'любимого', 'ухаживать', 'хочу влюбиться', 'половинку',
-      'женат', 'жених', 'замуж', 'бачат', '🖇',
-      '❌', '❗️', 'футбол', 'караоке', 'понравлюсь твоей маме'
+      'любимого', 'ухаживать', 'хочу влюбиться', 'половинку', 'женат', 'жених', 'замуж', 'бачат',
+      '🖇', '❌', '❗️', 'футбол', 'караоке', 'понравлюсь твоей маме'
     ].some(string => desc.includes(string))
   },
   heightFilter(desc) {
@@ -65,72 +58,68 @@ const checks = {
   },
   genderRoles(desc) {
     return [
-      'мужчин', 'женщин',
-      'чтобы я написала тебе первая',
-      'первая не пишу', 'дай мне знать'
+      'мужчин', 'женщин', 'чтобы я написала тебе первая', 'первая не пишу', 'дай мне знать'
     ].some(string => desc.includes(string))
     || desc.includes('парн') && desc.includes('перв')
   },
   corny(desc) {
     return [
       'зачем тебе умному', 'сапиосексуал', 'бог дал тебе', 'абсолютно понятен',
-      'иллюзия большого выбора', 'один здесь отдыхаешь'
+      'иллюзия большого выбора', 'один здесь отдыхаешь', 'дочь маминой'
     ].some(string => desc.includes(string))
   },
   narcissism(desc) {
     return [
-      'вредная', 'скучаю', 'душн', 'адекватн', 'на манеже', 'на базе',
-      'леди', 'принц', 'забери меня'
+      'вредн', 'скучаю', 'душн', 'адекватн', 'на манеже', 'на базе', 'леди', 'принц', 'забери меня'
     ].some(string => desc.includes(string))
   },
   adjectivesSayNothing(desc) {
-    const adjectivesCount = desc.match(/ая/g) || []
-    return (adjectivesCount.length > 5)
-  }
+    const adjectives = desc.match(/ая/g) || []
+    return adjectives.length > 5
+  },
+  patriot(desc) { return desc.includes('🇷🇺') }
 }
 
 const filter = {
-  delay(extraDelay = 0) {
-    return Math.ceil(Math.random() * 1000 + 500 + extraDelay)
+  delay() {
+    return Math.ceil(Math.random() * 1000 + 500)
   },
   fetchDescription() {
-    const descriptionVariant0 = "[aria-hidden='false'] .BreakWord"
-    const descriptionNode = document.querySelector(descriptionVariant0)
+    const descriptionSelector = "[aria-hidden='false'] .BreakWord"
+    const descriptionNode = document.querySelector(descriptionSelector)
 
-    if (descriptionNode) {
-      return descriptionNode.innerText
-    }
-
+    if (descriptionNode) { return descriptionNode.innerText }
     return ''
   },
   nope(reason, description) {
-    console.log(`%c[NOPE: ${reason}]`, 'background: #000; color: #7f00ff', description)
+    const purpleOnBlack = 'background: #000; color: #7f00ff'
+    console.log(`%c[NOPE: ${reason}]\n`, purpleOnBlack, description)
+
     const dislikeButton = document.querySelectorAll('.button')[1]
     if (!dislikeButton) { return console.log('🤖 Dislike button not found') }
 
     dislikeButton.click()
     setTimeout(filter.call, 900)
   },
-  call() {
+  closePopup() {
     const noThanks = Array.from(document.querySelectorAll('.button span')).find(
       button => button.innerText == 'NO THANKS'
     )
-    if (noThanks) { window.location.reload() }
+    if (noThanks) { return window.location.reload() }
+  },
+  call() {
+    filter.closePopup()
 
-    const rawDescription = filter.fetchDescription()
-    const desc = rawDescription.toLowerCase()
+    const desc = filter.fetchDescription()
+    const dealbreaker = Object.keys(checks).find(check => checks[check](desc.toLowerCase()))
+    if (dealbreaker) { return filter.nope(dealbreaker, desc) }
 
-    const dealbreaker = Object.keys(checks).find(check => checks[check](desc))
-    if (dealbreaker) { return filter.nope(dealbreaker, rawDescription) }
-
-    console.log(`🤖 Your turn human, swipe or improve me\n\n${rawDescription}\n`)
+    console.log(`🤖 Your turn human, swipe or improve me\n\n${desc}\n`)
     window.reloadTimer = setTimeout(window.location.reload.bind(window.location), 3 * 60000)
   }
 }
 
-window.addEventListener('load', () => {
-  setTimeout(filter.call, filter.delay(3000))
-}, false)
+window.addEventListener('load', () => { setTimeout(filter.call, filter.delay() + 5000 ) }, false)
 
 document.addEventListener('keyup', (event) => {
   if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
