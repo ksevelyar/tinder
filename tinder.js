@@ -1,6 +1,6 @@
 // ==UserScript==
-// @author  ksevelyar
 // @name    dat_filter_tinder
+// @author  ksevelyar
 // @grant   none
 // @include https://tinder.com/app/recs
 // ==/UserScript==
@@ -65,9 +65,10 @@ const checks = {
   corny(desc) {
     return [
       'зачем тебе умному', 'сапиосексуал', 'бог дал тебе', 'абсолютно понятен',
-      'иллюзия большого выбора', 'один здесь отдыхаешь', 'дочь маминой',
-      'люблю путешеств', 'выстав'
+      'один здесь отдыхаешь', 'дочь маминой',
+      'путешеств', 'выстав'
     ].some(string => desc.includes(string))
+    || desc.includes('иллюзия') && desc.includes('выбор')
   },
   narcissism(desc) {
     return [
@@ -81,9 +82,16 @@ const filter = {
   delay() {
     return Math.ceil(Math.random() * 1000 + 500)
   },
-  fetchDescription() {
-    const descriptionSelector = "[aria-hidden='false'] .BreakWord"
-    const descriptionNode = document.querySelector(descriptionSelector)
+  getByXpath(path) {
+    return document.evaluate(path, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue
+  },
+  async sleep(ms) { return new Promise(resolve => setTimeout(resolve, ms)) },
+  async fetchDescription() {
+    const infoButton = filter.getByXpath('//*/div/div[1]/div/main/div[1]/div/div/div[1]/div[1]/div/div[3]/div[3]/button')
+    infoButton.click()
+
+    await filter.sleep(300)
+    const descriptionNode = document.querySelector('.BreakWord')
 
     if (descriptionNode) { return descriptionNode.innerText }
     return ''
@@ -92,7 +100,7 @@ const filter = {
     const purpleOnBlack = 'background: #000; color: #7f00ff'
     console.log(`%c[NOPE: ${reason}]\n`, purpleOnBlack, description)
 
-    const dislikeButton = document.querySelectorAll('.button')[1]
+    const dislikeButton = document.querySelectorAll('.button')[0]
     if (!dislikeButton) { return console.log('🤖 Dislike button not found') }
 
     dislikeButton.click()
@@ -104,10 +112,10 @@ const filter = {
     )
     if (noThanks) { return window.location.reload() }
   },
-  call() {
+  async call() {
     filter.closePopup()
 
-    const desc = filter.fetchDescription()
+    const desc = await filter.fetchDescription()
     const dealbreaker = Object.keys(checks).find(check => checks[check](desc.toLowerCase()))
     if (dealbreaker) { return filter.nope(dealbreaker, desc) }
 
